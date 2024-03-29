@@ -51,11 +51,18 @@ const login = async (req, res) => {
       return res.status(400).json({ msg: "Invalid Credentials" });
     }
     const user = await bcrypt.compare(password, userExist.password);
+    
+    const userId=userExist._id.toString()
+    console.log(userId)
+    const userNumber= await User.findById(userId).select("phone")
+
+
+    console.log("Logged user Number ",userNumber)
+
     if (user) {
       res.status(201).json({
-        message: "Login Successfully",
+        // message: "Login Successfully",
         token: await userExist.generateToken(),
-        userId: userExist._id.toString(),
       });
     } else {
       res.status(401).json({ message: "Invalid Password " });
